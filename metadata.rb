@@ -1,8 +1,8 @@
-name             'replace_cookbook'
+name             'phpmyadmin'
 maintainer       'OurTownRentals.com'
-maintainer_email 'replace_email@ourtownrentals.com'
+maintainer_email 'evan@ourtownrentals.com'
 license          'All rights reserved'
-description      'replace_description.'
+description      'Configures phpMyAdmin.'
 version          '0.0.0'
 
-recipe 'replace_cookbook::default', 'replace_description.'
+recipe 'phpmyadmin::default', 'Configures phpMyAdmin.'

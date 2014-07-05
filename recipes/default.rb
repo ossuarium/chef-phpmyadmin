@@ -1,4 +1,4 @@
 #
-# Cookbook Name:: replace_cookbook
+# Cookbook Name:: phpmyadmin
 # Recipe:: default
 #
