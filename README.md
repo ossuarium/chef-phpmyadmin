@@ -14,12 +14,12 @@ Configures phpMyAdmin.
 
 ### Source Code
 
-The [phpmyadmin source](https://bitbucket.org/ourtownrentals/chef-phpmyadmin)
-is hosted on Bitbucket.
+The [phpmyadmin source](https://github.com/ourtownrentals/chef-phpmyadmin)
+is hosted on GitHub.
 To clone the project run
 
 ````bash
-$ git clone https://bitbucket.org/ourtownrentals/chef-phpmyadmin.git
+$ git clone https://github.com/ourtownrentals/chef-phpmyadmin.git
 ````
 
 ### Rake
@@ -63,7 +63,7 @@ Please submit and comment on bug reports and feature requests.
 
 To submit a patch:
 
-1. Fork it (https://bitbucket.org/ourtownrentals/chef-phpmyadmin/fork).
+1. Fork it (https://github.com/ourtownrentals/chef-phpmyadmin/fork).
 2. Create your feature branch (`git checkout -b my-new-feature`).
 3. Make changes. Write and run tests.
 4. Commit your changes (`git commit -am 'Add some feature'`).
