@@ -1,6 +1,21 @@
 <?php
 $cfg['blowfish_secret'] = '<%= @blowfish_secret %>';
+$cfg['UploadDir'] = '<%= @app.dir %>/upload';
+$cfg['SaveDir'] = '<%= @app.dir %>/save';
+$cfg['TempDir'] = '<%= @app.dir %>/tmp';
 
-$i=0;
-$i++;
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][1]['auth_type'] = 'cookie';
+
+<% unless node['phpmyadmin']['hide'].empty? -%>
+$cfg['Servers'][1]['hide_db'] = '^(<%= node['phpmyadmin']['hide'].join('|') %>)$';
+<% end -%>
+
+$cfg['Servers'][1]['controlhost'] = 'localhost';
+$cfg['Servers'][1]['controlport'] = '<%= node['mysql']['port'] %>';
+$cfg['Servers'][1]['controluser'] = '<%= @app.db_user %>';
+$cfg['Servers'][1]['controlpass'] = '<%= @app.db_password %>';
+$cfg['Servers'][1]['pmadb'] = '<%= @app.db_name %>';
+
+<% node['phpmyadmin']['control_tables'].each do |k, v| -%>
+$cfg['Servers'][1]['<%= k %>'] = '<%= v %>';
+<% end -%>

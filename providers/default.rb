@@ -35,6 +35,7 @@ def set_attributes
   new_resource.id = "#{new_resource.service.name}_phpmyadmin"
   new_resource.mysql_connection = {
     host: 'localhost',
+    port: node['mysql']['port'].to_i,
     username: 'root',
     password: node['mysql']['server_root_password']
   }
@@ -43,13 +44,17 @@ end
 def create_default
   set_attributes
 
+  # Create the LAMP app.
   core_lamp_app new_resource.id do
     moniker 'phpmyadmin'
     service new_resource.service
     database true
     mysql_connection new_resource.mysql_connection
+    db_name "phpmyadmin_#{new_resource.service.name}"
+    db_client 'localhost'
   end
 
+  # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance.conf`.
   template "#{new_resource.id}_instance.conf" do
     path lazy {
       resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf'
@@ -60,12 +65,13 @@ def create_default
         name: resources("core_lamp_app[#{new_resource.id}]").name,
         moniker: resources("core_lamp_app[#{new_resource.id}]").moniker,
         confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
-        docroot: resources("core_lamp_app[#{new_resource.id}]").dir + '/current'
+        docroot: resources("core_lamp_app[#{new_resource.id}]").dir
       }
     }
     notifies :reload, 'service[apache2]'
   end
 
+  # Create `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
   template "#{node['apache']['dir']}/sites-available/#{new_resource.id}.conf" do
     source 'apache-vhost.conf.erb'
     cookbook 'core'
@@ -74,7 +80,7 @@ def create_default
         name: new_resource.id,
         server_name: new_resource.domain,
         server_aliases: new_resource.aliases,
-        docroot: resources("core_lamp_app[#{new_resource.id}]").dir + '/current',
+        docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
         directory_index: ['index.php', 'index.html', 'index.htm'],
         includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf']
       }
@@ -82,46 +88,86 @@ def create_default
     notifies :reload, 'service[apache2]'
   end
 
-  directory "lamp_app_#{new_resource.id}" do
+  # Create `/srv/service_name/phpmyadmin`.
+  directory new_resource.id do
     path lazy { resources("core_lamp_app[#{new_resource.id}]").dir }
   end
 
+  # Create `/srv/service_name/shared/phpmyadmin/config.inc.php`.
   template "lamp_app_#{new_resource.id}_config" do
     path lazy {
       resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
     }
     source 'phpmyadmin-config.inc.php.erb'
-    variables(
-      blowfish_secret: Digest::SHA1.hexdigest(IO.read('/dev/urandom', 2048))
+    variables lazy {
+      {
+        app: resources("core_lamp_app[#{new_resource.id}]"),
+        blowfish_secret: Digest::SHA1.hexdigest(IO.read('/dev/urandom', 2048))
+      }
+    }
+  end
+
+  # Download and extract the package.
+  tar_extract("#{node['phpmyadmin']['mirror']}/#{node['phpmyadmin']['version']}" \
+              "/phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages.tar.gz") do
+    target_dir new_resource.service.dir
+    checksum node['phpmyadmin']['checksum']
+    creates(
+      "#{new_resource.service.dir}/phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages"
     )
   end
 
-  link "#{new_resource.id}_shared" do
-    target_file "#{new_resource.service.dir}/phpmyadmin/shared"
-    to lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir }
+  # Deploy the release.
+  execute "lamp_app_#{new_resource.id}_deploy" do
+    command lazy {
+      'rm -rf phpmyadmin/* && cp -a' \
+      " phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages/* phpmyadmin" \
+      " && chgrp -R #{node['apache']['group']} phpmyadmin/*" \
+      ' && sed -i s/phpmyadmin/' +
+      resources("core_lamp_app[#{new_resource.id}]").db_name +
+      "/g phpmyadmin/#{node['phpmyadmin']['sql']}"
+    }
+    cwd new_resource.service.dir
+    creates lazy {
+      resources("core_lamp_app[#{new_resource.id}]").dir +
+      "/RELEASE-DATE-#{node['phpmyadmin']['version']}"
+    }
   end
 
-  deploy new_resource.id do
-    deploy_to "#{new_resource.service.dir}/phpmyadmin" # can't use lazy here
-    repo node['phpmyadmin']['repo']
-    revision node['phpmyadmin']['revision']
-    group node['apache']['group']
-    keep_releases 1
-    create_dirs_before_symlink []
-    purge_before_symlink []
-    symlinks({})
-    symlink_before_migrate({})
+  # Create a link to `config.inc.php`.
+  link "#{new_resource.service.dir}/phpmyadmin/config.inc.php" do
+    to lazy {
+      resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
+    }
   end
 
-  mysql_database "#{new_resource.id}_sql" do
+  # Create and link any shared directories.
+  node['phpmyadmin']['shared'].each do |path|
+    directory "#{new_resource.id}_shared_#{path}" do
+      path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}" }
+      owner node['apache']['group']
+      group node['apache']['group']
+    end
+
+    link "#{new_resource.service.dir}/phpmyadmin/#{path}" do
+      to lazy {
+        resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}"
+      }
+    end
+  end
+
+  # Create control database tables.
+  mysql_database "#{new_resource.id}_create_tables" do
     connection new_resource.mysql_connection
-    sql lazy { File.open(
-        resources("core_lamp_app[#{new_resource.id}]").dir + node['phpmyadmin']['sql']
+    database_name lazy { resources("core_lamp_app[#{new_resource.id}]").db_name }
+    sql lazy { ::File.open(
+        resources("core_lamp_app[#{new_resource.id}]").dir + "/#{node['phpmyadmin']['sql']}"
       ).read
     }
     action :query
   end
 
+  # Enable the site.
   apache_site new_resource.id do
     enable true
   end
@@ -130,10 +176,12 @@ end
 def delete_default
   set_attributes
 
+  # Disable the site.
   apache_site new_resource.id do
     enable false
   end
 
+  # Delete `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
   template "#{node['apache']['dir']}/sites-available/#{new_resource.id}" do
     source 'apache-vhost.conf.erb'
     cookbook 'core'
@@ -141,18 +189,14 @@ def delete_default
     notifies :reload, 'service[apache2]'
   end
 
-  directory "lamp_app_#{new_resource.id}" do
+  # Delete `/srv/service_name/phpmyadmin`.
+  directory new_resource.id do
     path lazy { resources("core_lamp_app[#{new_resource.id}]").dir }
     recursive true
     action :delete
   end
 
-  directory "lamp_app_#{new_resource.id}_cached-copy" do
-    path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/cached-copy' }
-    recursive true
-    action :delete
-  end
-
+  # Delete `/srv/service_name/shared/phpmyadmin/config.inc.php`.
   template "lamp_app_#{new_resource.id}_config" do
     path lazy {
       resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
@@ -161,11 +205,14 @@ def delete_default
     action :delete
   end
 
+  # Delete or destroy the LAMP app.
   core_lamp_app new_resource.id do
     moniker 'phpmyadmin'
     service new_resource.service
-    database new_resource.mysql_connection.nil? ? false : true
+    database true
     mysql_connection new_resource.mysql_connection
+    db_name "phpmyadmin_#{new_resource.service.name}"
+    db_client 'localhost'
     action new_resource.action
   end
 end
