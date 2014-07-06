@@ -149,7 +149,7 @@ def create_default
   node['phpmyadmin']['shared'].each do |path|
     directory "#{new_resource.id}_shared_#{path}" do
       path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}" }
-      owner node['apache']['group']
+      owner node['apache']['user']
       group node['apache']['group']
       mode '0750'
     end
