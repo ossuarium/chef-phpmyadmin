@@ -6,9 +6,42 @@
 
 Configures phpMyAdmin.
 
+## Requirements
+
+### Cookbooks:
+
+* core (~> 0.0.0)
+* mysql (~> 5.3.6)
+
+## Attributes
+
+Attribute | Default | Description | Choices
+----------|---------|-------------|--------
+`node['phpmyadmin']['instances']` | `"[ ... ]"` |  |
+
 ## Recipes
 
 * phpmyadmin::default - Configures phpMyAdmin.
+
+## Resources
+
+* [phpmyadmin](#phpmyadmin)
+
+### phpmyadmin
+
+
+
+#### Actions
+
+- create: creates the instance. Default action.
+- delete: deletes the instance.
+
+#### Attribute Parameters
+
+- name: the name of the instance.
+- service: the core_service to use for the instance.
+- domain: the domain to use for the web server.
+- aliases: the domain aliases to use for the web server. Defaults to <code>[]</code>.
 
 ## Development and Testing
 

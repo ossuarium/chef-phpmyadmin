@@ -1,0 +1,10 @@
+<Directory <%= @docroot %>>
+  Require all granted
+
+  <FilesMatch "\.(php)$">
+    SetHandler php-fcgi-<%= @name %>
+    Require all granted
+  </FilesMatch>
+</Directory>
+
+Include <%= @confroot %>/php-fcgi.conf

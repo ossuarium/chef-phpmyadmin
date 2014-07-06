@@ -12,5 +12,19 @@ platforms:
 
 suites:
   - name: default
+    driver:
+      network:
+        - ["private_network", {ip: "10.10.10.101"}]
     run_list:
+      - recipe[mysql::server]
       - recipe[phpmyadmin::default]
+    attributes:
+      core:
+        common_system: false
+        services:
+          - name: mysql_admin
+      phpmyadmin:
+        instances:
+          - service: mysql_admin
+        mysql:
+          server_root_password: password
