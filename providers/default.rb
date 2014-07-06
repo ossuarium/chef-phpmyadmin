@@ -60,6 +60,7 @@ def create_default
       resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf'
     }
     source 'apache-instance-phpmyadmin.conf.erb'
+    cookbook 'phpmyadmin'
     variables lazy {
       {
         name: resources("core_lamp_app[#{new_resource.id}]").name,
@@ -99,6 +100,7 @@ def create_default
       resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
     }
     source 'phpmyadmin-config.inc.php.erb'
+    cookbook 'phpmyadmin'
     group node['apache']['group']
     mode '0640'
     variables lazy {
@@ -205,6 +207,7 @@ def delete_default
       resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
     }
     source 'phpmyadmin-config.inc.php.erb'
+    cookbook 'phpmyadmin'
     action :delete
   end
 
