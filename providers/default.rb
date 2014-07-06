@@ -99,6 +99,8 @@ def create_default
       resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
     }
     source 'phpmyadmin-config.inc.php.erb'
+    group node['apache']['group']
+    mode '0640'
     variables lazy {
       {
         app: resources("core_lamp_app[#{new_resource.id}]"),
@@ -147,6 +149,7 @@ def create_default
       path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}" }
       owner node['apache']['group']
       group node['apache']['group']
+      mode '0750'
     end
 
     link "#{new_resource.service.dir}/phpmyadmin/#{path}" do
