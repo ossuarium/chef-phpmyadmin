@@ -23,7 +23,7 @@ end
 
 action :destroy do
   converge_by("Destroying #{@new_resource}") do
-    delete_lamp_app
+    delete_default
   end
 end
 
