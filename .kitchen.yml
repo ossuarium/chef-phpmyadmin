@@ -26,6 +26,5 @@ suites:
       phpmyadmin:
         instances:
           - service: mysql_admin
-            action: delete
       mysql:
         server_root_password: password

@@ -11,6 +11,7 @@ Configures phpMyAdmin.
 ### Cookbooks:
 
 * core (~> 0.0.0)
+* git (~> 4.0.2)
 * mysql (~> 5.3.6)
 
 ## Attributes
@@ -18,6 +19,9 @@ Configures phpMyAdmin.
 Attribute | Default | Description | Choices
 ----------|---------|-------------|--------
 `node['phpmyadmin']['instances']` | `"[ ... ]"` |  |
+`node['phpmyadmin']['repo']` | `"https://github.com/phpmyadmin/phpmyadmin.git"` |  |
+`node['phpmyadmin']['revision']` | `"RELEASE_4_2_5"` |  |
+`node['phpmyadmin']['sql']` | `"examples/create_tables.sql"` |  |
 
 ## Recipes
 
@@ -35,6 +39,7 @@ Attribute | Default | Description | Choices
 
 - create: creates the instance. Default action.
 - delete: deletes the instance.
+- destroy: deletes the instance, database, and shared directory.
 
 #### Attribute Parameters
 
