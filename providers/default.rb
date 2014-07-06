@@ -147,6 +147,20 @@ def delete_default
     action :delete
   end
 
+  directory "lamp_app_#{new_resource.id}_cached-copy" do
+    path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/cached-copy' }
+    recursive true
+    action :delete
+  end
+
+  template "lamp_app_#{new_resource.id}_config" do
+    path lazy {
+      resources("core_lamp_app[#{new_resource.id}]").shared_dir + '/config.inc.php'
+    }
+    source 'phpmyadmin-config.inc.php.erb'
+    action :delete
+  end
+
   core_lamp_app new_resource.id do
     moniker 'phpmyadmin'
     service new_resource.service
