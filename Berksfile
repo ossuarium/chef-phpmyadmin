@@ -6,7 +6,8 @@ cookbook 'core',
          github: 'ourtownrentals/chef-core'
 
 cookbook 'php',
-         github: 'ourtownrentals/chef-php'
+         github: 'ourtownrentals/chef-php',
+         branch: 'otr'
 
 cookbook 'apache2',
          github: 'onehealth-cookbooks/apache2',
