@@ -25,6 +25,7 @@ suites:
           mysql_admin: {}
       phpmyadmin:
         instances:
-          mysql_admin: {}
+          mysql_admin:
+            vhost: true
       mysql:
         server_root_password: password

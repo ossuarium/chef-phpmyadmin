@@ -48,10 +48,27 @@ def create_default
   core_lamp_app new_resource.id do
     moniker 'phpmyadmin'
     service new_resource.service
+    shared node['phpmyadmin']['shared']
     database true
     mysql_connection new_resource.mysql_connection
     db_name "phpmyadmin_#{new_resource.service.name}"
     db_client 'localhost'
+  end
+
+  # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance.conf`.
+  template "#{new_resource.id}_instance.conf" do
+    path lazy {
+      resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf'
+    }
+    source 'apache-instance-phpmyadmin.conf.erb'
+    cookbook 'phpmyadmin'
+    variables lazy {
+      {
+        confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
+        docroot: resources("core_lamp_app[#{new_resource.id}]").dir
+      }
+    }
+    notifies :reload, 'service[apache2]'
   end
 
   # Create `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
@@ -65,10 +82,11 @@ def create_default
         server_aliases: new_resource.aliases,
         docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
         directory_index: ['index.php', 'index.html', 'index.htm'],
-        includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/php-fcgi.conf']
+        includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf']
       }
     }
     notifies :reload, 'service[apache2]'
+    only_if { new_resource.vhost }
   end
 
   # Create `/srv/service_name/phpmyadmin`.
@@ -127,15 +145,8 @@ def create_default
     }
   end
 
-  # Create and link any shared directories.
+  # Link shared directories.
   node['phpmyadmin']['shared'].each do |path|
-    directory "#{new_resource.id}_shared_#{path}" do
-      path lazy { resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}" }
-      owner node['apache']['user']
-      group node['apache']['group']
-      mode '0750'
-    end
-
     link "#{new_resource.service.dir}/phpmyadmin/#{path}" do
       to lazy {
         resources("core_lamp_app[#{new_resource.id}]").shared_dir + "/#{path}"
