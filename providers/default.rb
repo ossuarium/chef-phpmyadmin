@@ -54,24 +54,6 @@ def create_default
     db_client 'localhost'
   end
 
-  # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance.conf`.
-  template "#{new_resource.id}_instance.conf" do
-    path lazy {
-      resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf'
-    }
-    source 'apache-instance-phpmyadmin.conf.erb'
-    cookbook 'phpmyadmin'
-    variables lazy {
-      {
-        name: resources("core_lamp_app[#{new_resource.id}]").name,
-        moniker: resources("core_lamp_app[#{new_resource.id}]").moniker,
-        confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
-        docroot: resources("core_lamp_app[#{new_resource.id}]").dir
-      }
-    }
-    notifies :reload, 'service[apache2]'
-  end
-
   # Create `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
   template "#{node['apache']['dir']}/sites-available/#{new_resource.id}.conf" do
     source 'apache-vhost.conf.erb'
@@ -83,7 +65,7 @@ def create_default
         server_aliases: new_resource.aliases,
         docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
         directory_index: ['index.php', 'index.html', 'index.htm'],
-        includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf']
+        includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/php-fcgi.conf']
       }
     }
     notifies :reload, 'service[apache2]'
