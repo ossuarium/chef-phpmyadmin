@@ -11,17 +11,15 @@ Configures phpMyAdmin.
 ### Cookbooks:
 
 * core (~> 0.0.0)
-* git (~> 4.0.2)
+* tar (~> 0.4.0)
 * mysql (~> 5.3.6)
+* php (~> 1.4.7)
 
 ## Attributes
 
 Attribute | Default | Description | Choices
 ----------|---------|-------------|--------
-`node['phpmyadmin']['instances']` | `"[ ... ]"` |  |
-`node['phpmyadmin']['repo']` | `"https://github.com/phpmyadmin/phpmyadmin.git"` |  |
-`node['phpmyadmin']['revision']` | `"RELEASE_4_2_5"` |  |
-`node['phpmyadmin']['sql']` | `"examples/create_tables.sql"` |  |
+`node['phpmyadmin']['instances']` | `{}` | Instances to create on the node. |
 
 ## Recipes
 

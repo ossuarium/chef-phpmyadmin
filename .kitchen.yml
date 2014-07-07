@@ -22,9 +22,9 @@ suites:
       core:
         common_system: false
         services:
-          - name: mysql_admin
+          mysql_admin: {}
       phpmyadmin:
         instances:
-          - service: mysql_admin
+          mysql_admin: {}
       mysql:
         server_root_password: password

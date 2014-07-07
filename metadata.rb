@@ -13,3 +13,10 @@ depends 'mysql', '~> 5.3.6'
 depends 'php', '~> 1.4.7'
 
 provides 'service[phpmyadmin]'
+
+attribute 'phpmyadmin/instances',
+          display_name: 'Instances',
+          description: %q{Instances to create on the node.},
+          type: 'hash',
+          recipes: ['phpmyadmin::default'],
+          default: {}

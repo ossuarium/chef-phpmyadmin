@@ -14,11 +14,11 @@ node['phpmyadmin']['extensions'].each do |extension|
   end
 end
 
-node['phpmyadmin']['instances'].each do |instance|
-  phpmyadmin instance[:service] do
-    service resources(core_service: instance[:service])
-    domain instance[:domain] if instance[:domain]
-    aliases instance[:aliases] if instance[:aliases]
-    action instance[:action] if instance[:action]
+node['phpmyadmin']['instances'].each do |instance, params|
+  phpmyadmin instance do
+    service params(core_service: params[:service])
+    domain params[:domain] if params[:domain]
+    aliases params[:aliases] if params[:aliases]
+    action params[:action] if params[:action]
   end
 end
