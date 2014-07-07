@@ -3,7 +3,7 @@
 # Attributes:: default
 #
 
-default['phpmyadmin']['instances'] = []
+default['phpmyadmin']['instances'] = {}
 
 default['phpmyadmin']['mirror'] = 'http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin'
 default['phpmyadmin']['version'] = '4.2.5'
