@@ -10,21 +10,15 @@ def whyrun_supported?
 end
 
 action :create do
-  converge_by("Creating #{@new_resource}") do
-    create_default
-  end
+  create_default
 end
 
 action :delete do
-  converge_by("Deleting #{@new_resource}") do
-    delete_default
-  end
+  delete_default
 end
 
 action :destroy do
-  converge_by("Destroying #{@new_resource}") do
-    delete_default
-  end
+  delete_default
 end
 
 private
