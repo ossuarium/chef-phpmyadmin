@@ -5,6 +5,14 @@
 
 default['phpmyadmin']['instances'] = {}
 
+default['phpmyadmin']['post_max_size'] = '200M'
+default['phpmyadmin']['upload_max_filesize'] = '200M'
+
+default['phpmyadmin']['php_options'] = {
+  'php_value[post_max_size]' => node['phpmyadmin']['post_max_size'],
+  'php_value[upload_max_filesize]' => node['phpmyadmin']['upload_max_filesize']
+}
+
 default['phpmyadmin']['mirror'] = 'http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin'
 default['phpmyadmin']['version'] = '4.2.5'
 default['phpmyadmin']['checksum'] = '6eaa6f4fd78f8092ecd8df4da10fb0c3f0bd09c390c8c7262d369ae12faa9434'

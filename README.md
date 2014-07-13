@@ -20,6 +20,8 @@ Configures phpMyAdmin.
 Attribute | Default | Description | Choices
 ----------|---------|-------------|--------
 `node['phpmyadmin']['instances']` | `{}` | Instances to create on the node. |
+`node['phpmyadmin']['post_max_size']` | `"200M"` | Sets the PHP post_max_size. |
+`node['phpmyadmin']['upload_max_filesize']` | `"200M"` | Sets the PHP upload_max_filesize. |
 
 ## Recipes
 

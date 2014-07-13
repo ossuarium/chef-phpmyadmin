@@ -43,6 +43,7 @@ def create_default
     moniker 'phpmyadmin'
     service new_resource.service
     shared node['phpmyadmin']['shared']
+    php_options node['phpmyadmin']['php_options']
     database true
     mysql_connection new_resource.mysql_connection
     db_name "phpmyadmin_#{new_resource.service.name}"
