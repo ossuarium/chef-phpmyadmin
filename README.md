@@ -13,7 +13,6 @@ Configures phpMyAdmin.
 * core (~> 0.0.0)
 * tar (~> 0.4.0)
 * mysql (~> 5.3.6)
-* php (~> 1.4.7)
 
 ## Attributes
 

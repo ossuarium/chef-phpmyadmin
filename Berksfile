@@ -5,9 +5,12 @@ metadata
 cookbook 'core',
          github: 'ourtownrentals/chef-core'
 
-cookbook 'php',
-         github: 'ourtownrentals/chef-php',
-         branch: 'otr'
+cookbook 'php-fpm',
+         github: 'ourtownrentals/chef-php-fpm',
+         branch: 'ourtownrentals'
+
+cookbook 'php-modules',
+         github: 'ourtownrentals/chef-php-modules'
 
 cookbook 'apache2',
          github: 'onehealth-cookbooks/apache2',
