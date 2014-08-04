@@ -84,6 +84,21 @@ def create_default
     only_if { new_resource.vhost }
   end
 
+  # Create `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
+  template "#{node['apache']['dir']}/conf.d/#{new_resource.id}.conf" do
+    source 'apache-alias-phpmyadmin.conf.erb'
+    cookbook 'phpmyadmin'
+    variables lazy {
+      {
+        confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
+        docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
+        alias_path: new_resource.alias_path
+      }
+    }
+    action new_resource.vhost ? :delete : :create
+    notifies :reload, 'service[apache2]'
+  end
+
   # Create `/srv/service_name/phpmyadmin`.
   directory new_resource.id do
     path lazy { resources("core_lamp_app[#{new_resource.id}]").dir }
@@ -160,10 +175,14 @@ def create_default
     action :query
   end
 
-  # Enable the site.
+  # Enable or disable the site.
   apache_site new_resource.id do
     enable true
-  end
+  end if new_resource.vhost
+
+  apache_site new_resource.id do
+    enable false
+  end unless new_resource.vhost
 end
 
 def delete_default
@@ -178,6 +197,14 @@ def delete_default
   template "#{node['apache']['dir']}/sites-available/#{new_resource.id}" do
     source 'apache-vhost.conf.erb'
     cookbook 'core'
+    action :delete
+    notifies :reload, 'service[apache2]'
+  end
+
+  # Delete `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
+  template "#{node['apache']['dir']}/conf.d/#{new_resource.id}.conf" do
+    source 'apache-alias-phpmyadmin.conf.erb'
+    cookbook 'phpmyadmin'
     action :delete
     notifies :reload, 'service[apache2]'
   end

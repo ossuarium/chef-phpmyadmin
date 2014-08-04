@@ -17,6 +17,7 @@ end
 node['phpmyadmin']['instances'].each do |instance, params|
   phpmyadmin instance do
     service resources(core_service: instance)
+    alias_path params[:alias_path] if params[:alias_path]
     vhost params[:vhost] if params[:vhost]
     domain params[:domain] if params[:domain]
     aliases params[:aliases] if params[:aliases]
