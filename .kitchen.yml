@@ -23,12 +23,12 @@ suites:
         common_system: false
         services:
           mysql_admin: {}
+      mysql:
+        server_root_password: password
       phpmyadmin:
         instances:
           mysql_admin:
             vhost: true
-      mysql:
-        server_root_password: password
 
   - name: ssl
     driver:
@@ -39,18 +39,18 @@ suites:
       - recipe[mysql::server]
       - recipe[phpmyadmin::default]
     attributes:
-      ssl:
-        domain: example_com
       core:
         common_system: false
-        ssl: true
         services:
           mysql_admin: {}
+        ssl: true
+      mysql:
+        server_root_password: password
       phpmyadmin:
         instances:
           mysql_admin:
+            domain: example.com
             ssl: true
             vhost: true
-            domain: example.com
-      mysql:
-        server_root_password: password
+      ssl:
+        domain: example_com
