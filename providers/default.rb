@@ -211,9 +211,9 @@ def delete_default
 
   # Disable the site.
   ['', '-ssl'].each do |ssl|
-  apache_site "#{new_resource.id}#{ssl}" do
-    enable false
-  end
+    apache_site "#{new_resource.id}#{ssl}" do
+      enable false
+    end
   end
 
   # Delete `/etc/apache2/sites-available/service_name_phpmyadmin(-ssl).conf`.
