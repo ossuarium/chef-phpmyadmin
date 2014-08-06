@@ -44,6 +44,7 @@ Attribute | Default | Description | Choices
 
 - name: the name of the instance.
 - service: the core_service to use for the instance.
+- ssl: whether to use ssl. Defaults to <code>false</code>.
 - vhost: whether to setup a vhost for this instance. Overrides global alias. Defaults to <code>false</code>.
 - alias_path: the web server global alias path for accessing the admin. Defaults to <code>"phpmyadmin"</code>.
 - domain: the domain to use for the web server.

@@ -50,38 +50,49 @@ def create_default
     db_client 'localhost'
   end
 
-  # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance.conf`.
-  template "#{new_resource.id}_instance.conf" do
-    path lazy {
-      resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf'
-    }
-    source 'apache-instance-phpmyadmin.conf.erb'
-    cookbook 'phpmyadmin'
-    variables lazy {
-      {
-        confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
-        docroot: resources("core_lamp_app[#{new_resource.id}]").dir
+  protocols = ['']
+  protocols << '-ssl' if new_resource.ssl
+
+  # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance(-ssl).conf`.
+  protocols.each do |ssl|
+    template "#{new_resource.id}_instance.conf" do
+      path lazy {
+        resources("core_lamp_app[#{new_resource.id}]").conf_dir + "/instance#{ssl}.conf"
       }
-    }
-    notifies :reload, 'service[apache2]'
+      source 'apache-instance-phpmyadmin.conf.erb'
+      cookbook 'phpmyadmin'
+      variables lazy {
+        {
+          ssl_enabled: new_resource.ssl,
+          ssl: ssl.empty? ? false : true,
+          server_name: new_resource.domain,
+          confroot: resources("core_lamp_app[#{new_resource.id}]").conf_dir,
+          docroot: resources("core_lamp_app[#{new_resource.id}]").dir
+        }
+      }
+      notifies :reload, 'service[apache2]'
+    end
   end
 
-  # Create `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
-  template "#{node['apache']['dir']}/sites-available/#{new_resource.id}.conf" do
-    source 'apache-vhost.conf.erb'
-    cookbook 'core'
-    variables lazy {
-      {
-        name: new_resource.id,
-        server_name: new_resource.domain,
-        server_aliases: new_resource.aliases,
-        docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
-        directory_index: ['index.php', 'index.html', 'index.htm'],
-        includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + '/instance.conf']
+  # Create `/etc/apache2/sites-available/service_name_phpmyadmin(-ssl).conf`.
+  protocols.each do |ssl|
+    template "#{node['apache']['dir']}/sites-available/#{new_resource.id}#{ssl}.conf" do
+      source 'apache-vhost.conf.erb'
+      cookbook 'core'
+      variables lazy {
+        {
+          name: new_resource.id,
+          ssl: ssl.empty? ? false : true,
+          server_name: new_resource.domain,
+          server_aliases: new_resource.aliases,
+          docroot: resources("core_lamp_app[#{new_resource.id}]").dir,
+          directory_index: ['index.php', 'index.html', 'index.htm'],
+          includes: [resources("core_lamp_app[#{new_resource.id}]").conf_dir + "/instance#{ssl}.conf"]
+        }
       }
-    }
-    notifies :reload, 'service[apache2]'
-    only_if { new_resource.vhost }
+      notifies :reload, 'service[apache2]'
+      only_if { new_resource.vhost }
+    end
   end
 
   # Create `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
@@ -176,29 +187,35 @@ def create_default
   end
 
   # Enable or disable the site.
-  apache_site new_resource.id do
-    enable true
-  end if new_resource.vhost
+  ['', '-ssl'].each do |ssl|
+    apache_site "#{new_resource.id}#{ssl}" do
+      enable true
+    end if new_resource.vhost
 
-  apache_site new_resource.id do
-    enable false
-  end unless new_resource.vhost
+    apache_site "#{new_resource.id}#{ssl}" do
+      enable false
+    end unless new_resource.vhost
+  end
 end
 
 def delete_default
   set_attributes
 
   # Disable the site.
-  apache_site new_resource.id do
+  ['', '-ssl'].each do |ssl|
+  apache_site "#{new_resource.id}#{ssl}" do
     enable false
   end
+  end
 
-  # Delete `/etc/apache2/sites-available/service_name_phpmyadmin.conf`.
-  template "#{node['apache']['dir']}/sites-available/#{new_resource.id}" do
-    source 'apache-vhost.conf.erb'
-    cookbook 'core'
-    action :delete
-    notifies :reload, 'service[apache2]'
+  # Delete `/etc/apache2/sites-available/service_name_phpmyadmin(-ssl).conf`.
+  ['', '-ssl'].each do |ssl|
+    template "#{node['apache']['dir']}/sites-available/#{new_resource.id}#{ssl}.conf" do
+      source 'apache-vhost.conf.erb'
+      cookbook 'core'
+      action :delete
+      notifies :reload, 'service[apache2]'
+    end
   end
 
   # Delete `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.

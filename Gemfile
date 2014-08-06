@@ -37,6 +37,8 @@ group :integration do
   gem 'test-kitchen', '1.2.1'
   gem 'kitchen-vagrant', '~> 0.15.0'
   gem 'guard-kitchen', '~> 0.0.2'
+  gem 'knife-solo', '~> 0.4.2'
+  gem 'knife-solo_data_bag', '~> 1.1.0'
 end
 
 gem 'fuubar', '~> 2.0.0.rc1', group: [:development, :unit]

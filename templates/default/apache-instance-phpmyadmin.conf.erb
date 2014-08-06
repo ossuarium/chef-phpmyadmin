@@ -2,4 +2,10 @@
   Require all granted
 </Directory>
 
+<% if (@ssl_enabled && @ssl) || !@ssl_enabled -%>
 Include <%= @confroot %>/php-fcgi.conf
+<% end -%>
+
+<% if (@ssl_enabled && !@ssl) -%>
+Redirect permanent / https://<%= @server_name %>/
+<% end -%>

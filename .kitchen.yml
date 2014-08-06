@@ -29,3 +29,28 @@ suites:
             vhost: true
       mysql:
         server_root_password: password
+
+  - name: ssl
+    driver:
+      network:
+        - ["private_network", {ip: "10.10.10.21"}]
+    run_list:
+      - recipe[core::ssl_certificates]
+      - recipe[mysql::server]
+      - recipe[phpmyadmin::default]
+    attributes:
+      ssl:
+        domain: example_com
+      core:
+        common_system: false
+        ssl: true
+        services:
+          mysql_admin: {}
+      phpmyadmin:
+        instances:
+          mysql_admin:
+            ssl: true
+            vhost: true
+            domain: example.com
+      mysql:
+        server_root_password: password
