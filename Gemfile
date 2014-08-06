@@ -4,6 +4,7 @@ gem 'chef', '~> 11.14.2'
 gem 'berkshelf', '~> 3.1.2'
 
 group :development do
+  gem 'knife-solo_data_bag', '~> 1.1.0'
   gem 'knife-cookbook-doc', '~> 0.11.0'
 
   gem 'yard', '~> 0.8.7.4'
@@ -37,8 +38,6 @@ group :integration do
   gem 'test-kitchen', '1.2.1'
   gem 'kitchen-vagrant', '~> 0.15.0'
   gem 'guard-kitchen', '~> 0.0.2'
-  gem 'knife-solo', '~> 0.4.2'
-  gem 'knife-solo_data_bag', '~> 1.1.0'
 end
 
 gem 'fuubar', '~> 2.0.0.rc1', group: [:development, :unit]
