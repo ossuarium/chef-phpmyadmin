@@ -187,11 +187,19 @@ def create_default
   end
 
   # Enable or disable the site.
-  ['', '-ssl'].each do |ssl|
-    apache_site "#{new_resource.id}#{ssl}" do
-      enable true
-    end if new_resource.vhost
+  apache_site new_resource.id do
+    enable true
+  end if new_resource.vhost
 
+  apache_site "#{new_resource.id}-ssl" do
+    enable true
+  end if new_resource.vhost && new_resource.ssl
+
+  apache_site "#{new_resource.id}-ssl" do
+    enable false
+  end unless new_resource.ssl
+
+  ['', '-ssl'].each do |ssl|
     apache_site "#{new_resource.id}#{ssl}" do
       enable false
     end unless new_resource.vhost
