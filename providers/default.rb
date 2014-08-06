@@ -38,6 +38,9 @@ end
 def create_default
   set_attributes
 
+  protocols = ['']
+  protocols << '-ssl' if new_resource.ssl
+
   # Create the LAMP app.
   core_lamp_app new_resource.id do
     moniker 'phpmyadmin'
@@ -49,9 +52,6 @@ def create_default
     db_name "phpmyadmin_#{new_resource.service.name}"
     db_client 'localhost'
   end
-
-  protocols = ['']
-  protocols << '-ssl' if new_resource.ssl
 
   # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance(-ssl).conf`.
   protocols.each do |ssl|
