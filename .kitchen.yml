@@ -49,8 +49,8 @@ suites:
       phpmyadmin:
         instances:
           mysql_admin:
-            domain: example.com
             ssl: true
             vhost: true
+            domain: example.com
       ssl:
         domain: example_com
