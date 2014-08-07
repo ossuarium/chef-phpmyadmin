@@ -24,7 +24,7 @@ end
 private
 
 def set_attributes
-  new_resource.domain ||= node['hostname']
+  new_resource.domain ||= node['fqdn']
 
   new_resource.id = "#{new_resource.service.name}_phpmyadmin"
   new_resource.mysql_connection = {
