@@ -10,6 +10,7 @@ Configures phpMyAdmin.
 
 ### Cookbooks:
 
+* apache2 (~> 2.0.0)
 * core (~> 0.0.0)
 * tar (~> 0.5.0)
 

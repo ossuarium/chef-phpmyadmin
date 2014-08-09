@@ -7,6 +7,7 @@ version          '0.0.0'
 
 recipe 'phpmyadmin::default', 'Configures phpMyAdmin.'
 
+depends 'apache2', '~> 2.0.0'
 depends 'core', '~> 0.0.0'
 depends 'tar', '~> 0.5.0'
 

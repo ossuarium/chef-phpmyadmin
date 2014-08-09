@@ -95,8 +95,8 @@ def create_default
     end
   end
 
-  # Create `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
-  template "#{node['apache']['dir']}/conf.d/#{new_resource.id}.conf" do
+  # Create `/etc/apache2/conf-available/service_name_phpmyadmin.conf`.
+  template "#{node['apache']['dir']}/conf-available/#{new_resource.id}.conf" do
     source 'apache-alias-phpmyadmin.conf.erb'
     cookbook 'phpmyadmin'
     variables lazy {
@@ -109,6 +109,8 @@ def create_default
     action new_resource.vhost ? :delete : :create
     notifies :reload, 'service[apache2]'
   end
+
+  apache_config new_resource.id
 
   # Create `/srv/service_name/phpmyadmin`.
   directory new_resource.id do
