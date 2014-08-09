@@ -11,7 +11,7 @@ Configures phpMyAdmin.
 ### Cookbooks:
 
 * core (~> 0.0.0)
-* tar (~> 0.4.0)
+* tar (~> 0.5.0)
 
 ## Attributes
 

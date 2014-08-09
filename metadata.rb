@@ -8,7 +8,7 @@ version          '0.0.0'
 recipe 'phpmyadmin::default', 'Configures phpMyAdmin.'
 
 depends 'core', '~> 0.0.0'
-depends 'tar', '~> 0.4.0'
+depends 'tar', '~> 0.5.0'
 
 provides 'service[phpmyadmin]'
 
