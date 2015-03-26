@@ -58,15 +58,15 @@ demonstration purposes only and do not apply to this software.
    has been marked with the prefix `replace_`.
    You can replace the placeholder cookbook name using
 
-````bash
+```bash
 $ git ls-files -z | xargs -0 sed -i 's/replace_cookbook/your_cookbook/g'
-````
+```
 
    To see a list of what else still needs to be replaced, run
 
-````bash
+```bash
 $ grep -R replace_
-````
+```
 
 Note that `CHANGELOG.md` is just a template for this skeleton.
 The actual changes for this project are documented in the commit history
@@ -80,29 +80,29 @@ and summarized under [Releases].
 If you want to merge in future updates from this skeleton and have your own origin,
 set up a separate branch to track this.
 
-````bash
+```bash
 $ git remote rename origin upstream
 $ git branch chef-cookbook
 $ git branch -u upstream/master chef-cookbook
-````
+```
 
 Then add an origin and push master
 
-````bash
+```bash
 $ git remote add origin git@github.com:your_username/chef-your_cookbook.git
 $ git push -u origin master
-````
+```
 
 Now, the `chef-cookbook` branch will pull changes from this project,
 which you can then merge into your other branches.
 
 If you later clone your repo you will need to create the update branch again.
 
-````bash
+```bash
 $ git remote add upstream https://github.com/razor-x/chef-cookbook.git
 $ git fetch upstream
 $ git checkout -b chef-cookbook upstream/master
-````
+```
 
 ## Source Code
 
@@ -110,9 +110,9 @@ The [chef-cookbook source](https://github.com/razor-x/chef-cookbook)
 source is hosted on GitHub.
 To clone the project run
 
-````bash
+```bash
 $ git clone https://github.com/razor-x/chef-cookbook.git
-````
+```
 
 ## Contributing
 
