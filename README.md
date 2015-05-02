@@ -1,13 +1,13 @@
 # Chef Skeleton Cookbook
 
-[![Apache 2.0 License](http://img.shields.io/badge/license-Apache_2.0-red.svg?style=flat)](./LICENSE.txt)
-[![Dependency Status](http://img.shields.io/gemnasium/razor-x/chef-cookbook.svg?style=flat)](https://gemnasium.com/razor-x/chef-cookbook)
-[![Build Status](http://img.shields.io/travis/razor-x/chef-cookbook.svg?style=flat)](https://travis-ci.org/razor-x/chef-cookbook)
-[![Coverage Status](http://img.shields.io/coveralls/razor-x/chef-cookbook.svg?style=flat)](https://coveralls.io/r/razor-x/chef-cookbook)
+[![All rights reserved](https://img.shields.io/badge/license-All_rights_reserved-red.svg)](./LICENSE.txt)
+[![Dependency Status](https://img.shields.io/gemnasium/razor-x/chef-cookbook.svg)](https://gemnasium.com/razor-x/chef-cookbook)
+[![Build Status](https://img.shields.io/travis/razor-x/chef-cookbook.svg)](https://travis-ci.org/razor-x/chef-cookbook)
+[![Coverage Status](https://img.shields.io/coveralls/razor-x/chef-cookbook.svg)](https://coveralls.io/r/razor-x/chef-cookbook)
 
 Use this project freely as a base for your testable [Chef] cookbooks.
 
-[Chef]: http://www.getchef.com/chef/
+[Chef]: https://www.chef.io/
 
 ## Description
 
@@ -24,13 +24,13 @@ Use this project freely as a base for your testable [Chef] cookbooks.
 * Badges from [Shields.io]!
 
 [Berkshelf]: http://berkshelf.com/index.html
-[ChefSpec]: http://sethvargo.github.io/chefspec/
+[ChefSpec]: https://sethvargo.github.io/chefspec/
 [EditorConfig]: http://editorconfig.org/
-[Foodcritic]: http://acrmp.github.io/foodcritic/
+[Foodcritic]: https://acrmp.github.io/foodcritic/
 [Guard]: http://guardgem.org/
 [knife-cookbook-doc]: https://github.com/realityforge/knife-cookbook-doc
 [Rake]: https://github.com/jimweirich/rake
-[RuboCop]: https://github.com/bbatsov/rubocop
+[RuboCop]: http://batsov.com/rubocop/
 [Shields.io]: http://shields.io/
 [Test Kitchen]: http://kitchen.ci/
 [Thor]: http://whatisthor.com/
@@ -60,6 +60,8 @@ demonstration purposes only and do not apply to this software.
 
 ```bash
 $ git ls-files -z | xargs -0 sed -i 's/replace_cookbook/your_cookbook/g'
+$ git ls-files -z | xargs -0 sed -i 's/replace_yyyy/yyyy/g'
+$ git ls-files -z | xargs -0 sed -i 's/replace_name_of_copyright_owner/name_of_copyright_owner/g'
 ```
 
    To see a list of what else still needs to be replaced, run
