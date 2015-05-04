@@ -1,4 +1,4 @@
 inherit_from: ../.rubocop.yml
 
-Style/MethodLength:
+Metrics/MethodLength:
   Enabled: false
