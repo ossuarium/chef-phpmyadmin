@@ -149,6 +149,8 @@ def create_default
     command lazy {
       'rm -rf phpmyadmin/* && cp -a' \
       " phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages/* phpmyadmin" \
+      " && rm -rf phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages" \
+      " && rm -rf phpmyadmin/setup" \
       " && chgrp -R #{node['apache']['group']} phpmyadmin/*"
     }
     cwd new_resource.service.dir
