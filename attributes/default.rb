@@ -13,10 +13,10 @@ default['phpmyadmin']['php_options'] = {
   'php_value[upload_max_filesize]' => node['phpmyadmin']['upload_max_filesize']
 }
 
-default['phpmyadmin']['mirror'] = 'http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin'
-default['phpmyadmin']['version'] = '4.2.5'
-default['phpmyadmin']['checksum'] = '6eaa6f4fd78f8092ecd8df4da10fb0c3f0bd09c390c8c7262d369ae12faa9434'
-default['phpmyadmin']['sql'] = 'examples/create_tables.sql'
+default['phpmyadmin']['mirror'] = 'https://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin'
+default['phpmyadmin']['version'] = '4.4.4'
+default['phpmyadmin']['checksum'] = '2e21f61b2b7ad626a29867718b7ab2b0007c5841b543a28cd377371f68c761c4'
+default['phpmyadmin']['sql'] = 'sql/create_tables.sql'
 default['phpmyadmin']['extensions'] = %w(zip)
 default['phpmyadmin']['shared'] = %w(upload save tmp)
 default['phpmyadmin']['hide'] = %w(information_schema mysql performance_schema phpmyadmin_.*)
