@@ -149,10 +149,7 @@ def create_default
     command lazy {
       'rm -rf phpmyadmin/* && cp -a' \
       " phpMyAdmin-#{node['phpmyadmin']['version']}-all-languages/* phpmyadmin" \
-      " && chgrp -R #{node['apache']['group']} phpmyadmin/*" \
-      ' && sed -i s/phpmyadmin/' +
-      resources("core_lamp_app[#{new_resource.id}]").db_name +
-      "/g phpmyadmin/#{node['phpmyadmin']['sql']}"
+      " && chgrp -R #{node['apache']['group']} phpmyadmin/*"
     }
     cwd new_resource.service.dir
     creates lazy {
@@ -184,6 +181,7 @@ def create_default
     sql lazy { ::File.open(
         resources("core_lamp_app[#{new_resource.id}]").dir + "/#{node['phpmyadmin']['sql']}"
       ).read
+      .gsub('phpmyadmin', resources("core_lamp_app[#{new_resource.id}]").db_name)
     }
     action :query
   end
