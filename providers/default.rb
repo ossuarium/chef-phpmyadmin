@@ -29,10 +29,10 @@ def set_attributes
   new_resource.id = "#{new_resource.service.name}_phpmyadmin"
   new_resource.mysql_connection = {
     host: 'localhost',
-    socket: "#{node['core']['run_dir']}/mysql-#{node['core']['mysql_instance']}/mysqld.sock",
-    port: node['core']['mysql_port'].to_i,
+    socket: "#{node['core']['run_dir']}/mysql-#{node['core']['mysql']['instance']}/mysqld.sock",
+    port: node['core']['mysql']['port'].to_i,
     username: 'root',
-    password: node['core']['mysql_root_password']
+    password: node['core']['mysql']['root_password']
   }
 end
 

@@ -6,7 +6,7 @@ $cfg['TempDir'] = '<%= @app.dir %>/tmp';
 
 $cfg['Servers'][1]['connect_type'] = 'socket';
 $cfg['Servers'][1]['socket'] =
-  '<%= node['core']['run_dir'] %>/mysql-<%= node['core']['mysql_instance'] %>/mysqld.sock';
+  '<%= node['core']['run_dir'] %>/mysql-<%= node['core']['mysql']['instance'] %>/mysqld.sock';
 
 $cfg['Servers'][1]['auth_type'] = 'cookie';
 
@@ -15,7 +15,7 @@ $cfg['Servers'][1]['hide_db'] = '^(<%= node['phpmyadmin']['hide'].join('|') %>)$
 <% end -%>
 
 $cfg['Servers'][1]['controlhost'] = '<%= Chef::Recipe::PrivateNetwork.new(node).ip %>';
-$cfg['Servers'][1]['controlport'] = '<%= node['core']['mysql_port'] %>';
+$cfg['Servers'][1]['controlport'] = '<%= node['core']['mysql']['port'] %>';
 $cfg['Servers'][1]['controluser'] = '<%= @app.db_user %>';
 $cfg['Servers'][1]['controlpass'] = '<%= @app.db_password %>';
 $cfg['Servers'][1]['pmadb'] = '<%= @app.db_name %>';
