@@ -1,7 +1,7 @@
 ### Source Code
 
 The [phpmyadmin source](https://github.com/ourtownrentals/chef-phpmyadmin)
-is hosted on Bitbucket.
+is hosted on GitHub.
 To clone the project run
 
 ```bash
