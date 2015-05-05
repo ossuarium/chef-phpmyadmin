@@ -29,9 +29,10 @@ def set_attributes
   new_resource.id = "#{new_resource.service.name}_phpmyadmin"
   new_resource.mysql_connection = {
     host: 'localhost',
-    port: node['mysql']['port'].to_i,
+    socket: "#{node['core']['run_dir']}/mysql-#{node['core']['mysql_instance']}/mysqld.sock",
+    port: node['core']['mysql_port'].to_i,
     username: 'root',
-    password: node['mysql']['server_root_password']
+    password: node['core']['mysql_root_password']
   }
 end
 
@@ -50,7 +51,6 @@ def create_default
     database true
     mysql_connection new_resource.mysql_connection
     db_name "phpmyadmin_#{new_resource.service.name}"
-    db_client 'localhost'
   end
 
   # Create `/etc/apache2/services/service_name/phpmyadmin.d/instance(-ssl).conf`.
@@ -258,7 +258,6 @@ def delete_default
     database true
     mysql_connection new_resource.mysql_connection
     db_name "phpmyadmin_#{new_resource.service.name}"
-    db_client 'localhost'
     action new_resource.action
   end
 end

@@ -26,6 +26,7 @@ default['phpmyadmin']['control_tables'] = {
   table_info: 'pma__table_info',
   table_coords: 'pma__table_coords',
   pdf_pages: 'pma__pdf_pages',
+  central_columns: 'pma__central_columns',
   column_info: 'pma__column_info',
   history: 'pma__history',
   table_uiprefs: 'pma__table_uiprefs',

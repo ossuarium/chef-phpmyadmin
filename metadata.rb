@@ -7,9 +7,11 @@ version          '0.0.0'
 
 recipe 'phpmyadmin::default', 'Configures phpMyAdmin.'
 
-depends 'apache2', '~> 2.0.0'
+depends 'apache2', '~> 3.0.1'
 depends 'core', '~> 0.0.0'
-depends 'tar', '~> 0.5.0'
+depends 'database', '~> 4.0.6'
+depends 'mysql2_chef_gem', '~> 1.0.1'
+depends 'tar', '~> 0.6.0'
 
 provides 'service[phpmyadmin]'
 

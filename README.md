@@ -10,9 +10,11 @@ Configures phpMyAdmin.
 
 ### Cookbooks:
 
-* apache2 (~> 2.0.0)
+* apache2 (~> 3.0.1)
 * core (~> 0.0.0)
-* tar (~> 0.5.0)
+* database (~> 4.0.6)
+* mysql2_chef_gem (~> 1.0.1)
+* tar (~> 0.6.0)
 
 ## Attributes
 

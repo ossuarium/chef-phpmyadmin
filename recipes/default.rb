@@ -8,6 +8,10 @@ node.default['php-modules']['modules']['mcrypt'] = true
 include_recipe 'tar::default'
 include_recipe 'core::lamp_app_server'
 
+mysql2_chef_gem 'default' do
+  action :install
+end
+
 node['phpmyadmin']['extensions'].each do |extension|
   php_pear extension do
     action :upgrade
