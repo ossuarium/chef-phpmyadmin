@@ -42,9 +42,11 @@ Forked from [chef-cookbook].
 
 1. Clone this repository or download a release.
 
-2. Customize `_README.md.erb`.
+2. Customize `doc/*.md`.
    - Do not edit `README.md` directly,
-     it will be generated from `_README.md.erb` using data from `metadata.rb`.
+     it will be generated from `_README.md.erb`
+     using data from `metadata.rb`,
+     and the `.md` files in `/doc`.
    - Replace things marked with `replace_`.
    - Add your badges.
    - Run `rake readme`.

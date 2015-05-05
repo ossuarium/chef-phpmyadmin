@@ -1,10 +1,11 @@
 # replace_cookbook
 
-[![All rights reserved](https://img.shields.io/badge/license-All_rights_reserved-red.svg)](./LICENSE.txt)
-
+<%= fragments['badges'] %>
 ## Description
 
 <%= description %>
+
+<%= fragments['usage'] %>
 <% unless platforms.empty? &&
    dependencies.empty? &&
    recommendations.empty? &&
@@ -45,10 +46,10 @@
 
 ## Attributes
 
-Attribute | Default | Description | Choices
-----------|---------|-------------|--------
+Attribute | Description | Default | Choices
+----------|-------------|---------|--------
 <% attributes.each do |name, description, default, choice| %>
-`<%= name %>` | `<%= default.inspect %>` | <%= description %> | <% unless choice.empty? %><%= "`#{choice.map(&:inspect).join('`, `')}`" %><% end %>
+`<%= name %>` | `<%= description %>` | <%= default.inspect %> | <% unless choice.empty? %><%= "`#{choice.map(&:inspect).join('`, `')}`" %><% end %>
 <% end -%>
 <% end -%>
 <% unless recipes.empty? %>
@@ -148,67 +149,12 @@ Attribute | Default | Description | Choices
 
 ## Development and Testing
 
-### Source Code
-
-The [replace_cookbook source](https://bitbucket.org/ourtownrentals/chef-replace_cookbook)
-is hosted on Bitbucket.
-To clone the project run
-
-```bash
-$ git clone https://bitbucket.org/ourtownrentals/chef-replace_cookbook.git
-```
-
-### Rake
-
-Run `rake -T` to see all Rake tasks.
-
-```
-rake all                          # Run all tasks
-rake doc                          # Build documentation
-rake foodcritic                   # Lint Chef cookbooks
-rake kitchen:all                  # Run all test instances
-rake kitchen:default-ubuntu-1404  # Run default-ubuntu-1404 test instance
-rake readme                       # Generate README.md from _README.md.erb
-rake rubocop                      # Run RuboCop
-rake rubocop:auto_correct         # Auto-correct RuboCop offenses
-rake spec                         # Run RSpec code examples
-rake test                         # Run kitchen integration tests
-rake yard                         # Generate YARD Documentation
-```
-
-### Thor
-
-Run `thor -T` to see all Thor tasks.
-
-### Guard
-
-Guard tasks have been separated into the following groups:
-
-- `doc`
-- `lint`
-- `unit`
-- `integration`
-
-By default, Guard will generate documentation, lint, and run unit tests.
-The integration group must be selected manually with `guard -g integration`.
-
-## Contributing
-
-Please submit and comment on bug reports and feature requests.
-
-To submit a patch:
-
-1. Fork it (https://bitbucket.org/ourtownrentals/chef-replace_cookbook/fork).
-2. Create your feature branch (`git checkout -b my-new-feature`).
-3. Make changes. Write and run tests.
-4. Commit your changes (`git commit -am 'Add some feature'`).
-5. Push to the branch (`git push origin my-new-feature`).
-6. Create a new Pull Request.
-
-## License
-
-Copyright © 2014-2015 OurTownRentals.com
-
+<%= fragments['source'] %>
+<%= fragments['rake'] %>
+<%= fragments['thor'] %>
+<%= fragments['guard'] %>
+<%= fragments['contributing'] %>
+<%= fragments['license'] %>
 ## Warranty
 
 This software is provided "as is" and without any express or
