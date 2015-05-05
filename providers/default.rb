@@ -110,7 +110,7 @@ def create_default
     notifies :reload, 'service[apache2]'
   end
 
-  apache_config new_resource.id
+  apache_config new_resource.id unless new_resource.vhost
 
   # Create `/srv/service_name/phpmyadmin`.
   directory new_resource.id do
@@ -226,6 +226,11 @@ def delete_default
       action :delete
       notifies :reload, 'service[apache2]'
     end
+  end
+
+  # Disable `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
+  apache_config new_resource.id do
+    enable false
   end
 
   # Delete `/etc/apache2/conf.d/service_name_phpmyadmin.conf`.
