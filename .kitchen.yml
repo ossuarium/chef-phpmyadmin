@@ -17,15 +17,15 @@ suites:
       network:
         - ["private_network", {ip: "10.10.10.20"}]
     run_list:
-      - recipe[mysql::server]
+      - recipe[core::mysql_server]
       - recipe[phpmyadmin::default]
     attributes:
       core:
         common_system: false
+        mysql:
+          root_password: password
         services:
           mysql_admin: {}
-      mysql:
-        server_root_password: password
       phpmyadmin:
         instances:
           mysql_admin:
@@ -37,16 +37,16 @@ suites:
         - ["private_network", {ip: "10.10.10.21"}]
     run_list:
       - recipe[core::ssl_certificates]
-      - recipe[mysql::server]
+      - recipe[core::mysql_server]
       - recipe[phpmyadmin::default]
     attributes:
       core:
         common_system: false
+        mysql:
+          root_password: password
         services:
           mysql_admin: {}
         ssl: true
-      mysql:
-        server_root_password: password
       phpmyadmin:
         instances:
           mysql_admin:
